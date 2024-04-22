@@ -1,5 +1,5 @@
 Game.registerMod("enableRefresh", {
-	init: () => {
+	init: function () {
         AddEvent(window, 'keydown', (e) => {
             Game.Notify(e.key,'',[16,5]);
             if (e.key == '5') {

@@ -1,5 +1,5 @@
 Game.registerMod("countStormClicks", {
-	init: () => {
+	init: function () {
         let popFunc = Game.shimmerTypes['golden'].popFunc.bind({});
         Game.shimmerTypes['golden'].popFunc = (me) => {
             if (!me.spawnLead) {

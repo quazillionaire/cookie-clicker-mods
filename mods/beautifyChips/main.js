@@ -1,5 +1,5 @@
 Game.registerMod("beautifyChips", {
-	init: () => {
+	init: function () {
 		let style = document.createElement("style");
 		// style.appendChild(document.createTextNode(""));
 		document.head.appendChild(style);

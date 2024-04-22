@@ -1,5 +1,5 @@
 Game.registerMod("chipsPerSec", {
-	init: () => {
+	init: function () {
 		// A function to calculate the chips per second
 		let chipsPerSec = () => {
 			let allTimeCookies = Game.cookiesReset + Game.cookiesEarned;
