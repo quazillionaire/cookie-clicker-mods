@@ -1,19 +1,22 @@
 Game.registerMod("chipsPerSec", {
-	init: function () {
-		// A function to calculate the chips per second
-		let chipsPerSec = () => {
-			let allTimeCookies = Game.cookiesReset + Game.cookiesEarned;
-			let currentCPS = Game.cookiesPs * (1 - Game.cpsSucked);
-			let ascendNowToOwn = Game.HowMuchPrestige(allTimeCookies);
-			let ascendInOneSecToOwn = Game.HowMuchPrestige(allTimeCookies + currentCPS);
-			return ascendInOneSecToOwn - ascendNowToOwn;
-		}
-		let prettyChipsPerSec = () => (Beautify(chipsPerSec()) + '/sec');
+	init: () => {
+		// A function to calculate the current number of heavenly chips
+		const calcCurrentChips = () => {
+			var chipsOwned = Game.HowMuchPrestige(Game.cookiesReset);
+			var ascendNowToOwn = Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned));
+			var ascendNowToGet = ascendNowToOwn - Math.floor(chipsOwned);
+			return BigInt(ascendNowToGet);
+		};
 
+		let chipsPerSecond = 0;
+		let lastChips = calcCurrentChips();
+		let currentChips = lastChips;
+
+		const chipsPerSecStr = () => (Beautify(chipsPerSecond, 1) + '/sec').replace(' ', '&nbsp;');
 
 		// Create the new HTML element and give it the same attributes as the current ascend chip number
-		let el = document.createElement('div');
-		el.innerText = prettyChipsPerSec();
+		const el = document.createElement('div');
+		el.innerHTML = chipsPerSecStr();
 		el.className = "roundedPanel";
 		el.setAttribute('id', 'chipsPerSec');
 
@@ -24,26 +27,29 @@ Game.registerMod("chipsPerSec", {
 		el.style.fontWeight = 'bold';
 		el.style.fontFamily = 'Georgia';
 		el.style.color = '#999';
-		el.style.whiteSpace = 'pre';
 
 		// Find the parent node and the reference node to prepend the new element to
-		let parent = document.querySelector('#legacyButton'),
+		const parent = document.querySelector('#legacyButton'),
 			reference = document.querySelector('#ascendNumber');
 
 		// Insert the new div
 		parent.insertBefore(el, reference);
 
-		let logic = () => {
-			if (chipsPerSec() > 0) {
-				el.innerText = prettyChipsPerSec();
+		const logic = () => {
+			if (lastChips) {
+				lastChips = currentChips;
+				currentChips = calcCurrentChips();
+				chipsPerSecond = Number(currentChips - lastChips);
+				el.innerHTML = chipsPerSecStr();
 				el.style.display = 'block';
 			} else {
+				lastChips = calcCurrentChips();
 				el.style.display = 'none';
 			}
 		};
 
 		Game.registerHook('logic', () => {
-			if (Number.isInteger(Game.T / 15)) logic();
+			if (Game.T % Game.fps == 0) logic();
 		});
 
 		logic();
