@@ -3,9 +3,9 @@
 	"ID": "bulkBuy50",
 	"Author": "Quazillionaire",
 	"Description": "Adds a 50 button to Cookie Clicker's bulk buy options.",
-	"ModVersion": 1.3,
-	"GameVersion": 2.048,
-	"Date": "18/06/2022",
+	"ModVersion": 1.4,
+	"GameVersion": 2.053,
+	"Date": "11/03/2025",
 	"Dependencies": [],
 	"Disabled": 0,
 	"AllowSteamAchievs": 1

@@ -16,11 +16,11 @@ Game.registerMod("bulkBuy50", {
 			PlaySound('snd/tick.mp3');
 		} else {
 			// This will only be triggered if one of the normal buy buttons are clicked, so just 
-			// run the normal function and deselect the X button
+			// run the normal function and deselect the 50 button
 			Game.storeBulkButton(id);
 			this.btn50.classList.remove('selected');
 		}
-	},	
+	},
 
 	init: function () {
 		let MOD = this;
@@ -57,5 +57,23 @@ Game.registerMod("bulkBuy50", {
 
 		let bulkBuyX = Game.mods['bulkBuyX'];
 		if (bulkBuyX !== undefined) bulkBuyX.adjustForBulk50();
+
+		let buyBulk50Shortcut = false;
+		Game.registerHook('logic', () => {
+			if (Game.keys[16] && Game.keys[17] && !buyBulk50Shortcut) {
+				buyBulk50Shortcut = true;
+				Game.buyBulk = 50;
+				Game.storeBulkButton(-1);
+				MOD.btn50.classList.add('selected');
+			}
+			if ((!Game.keys[16] || !Game.keys[17]) && buyBulk50Shortcut) {
+				buyBulk50Shortcut = false;
+				if (Game.keys[17]) Game.buyBulk = 10;
+				else if (Game.keys[16]) Game.buyBulk = 100;
+				else Game.buyBulk = Game.buyBulkOld;
+				Game.storeBulkButton(-1);
+				MOD.btn50.classList.remove('selected');
+			}
+		});
 	}
 });
