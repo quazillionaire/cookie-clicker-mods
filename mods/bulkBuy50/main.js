@@ -38,25 +38,27 @@ Game.registerMod("bulkBuy50", {
 
 		MOD.btn50 = btn50;
 
-		// Get all the bulk buttons
-		document.querySelectorAll('.storeBulkAmount').forEach(btn => {
-			// Modify the CSS for the buttons so they all fit again
-			btn.style.width = "46px";
-			// Modify the onclick behavior of the buttons so they select and deselect properly
-			let id;
-			switch (btn.innerHTML.toLowerCase()) {
-				case '1': id = 2; btn1 = btn; break; // These ids are taken from the original code
-				case '10': id = 3; btn10 = btn; break;
-				case '50': id = 3.5; break; // This is the new id for the 50 button
-				case '100': id = 4; btn100 = btn; break;
-				case 'all': id = 5; btnAll = btn; break;
-				default: return;
-			}
-			btn.setAttribute('onclick', `Game.mods['${MOD.id}'].storeBulkButtonClick(${id})`);
-		});
-
 		let bulkBuyX = Game.mods['bulkBuyX'];
-		if (bulkBuyX !== undefined) bulkBuyX.adjustForBulk50();
+		if (bulkBuyX !== undefined){
+			bulkBuyX.adjustForBulk50();
+		} else {
+			// Get all the bulk buttons
+			document.querySelectorAll('.storeBulkAmount').forEach(btn => {
+				// Modify the CSS for the buttons so they all fit again
+				btn.style.width = "46px";
+				// Modify the onclick behavior of the buttons so they select and deselect properly
+				let id;
+				switch (btn.innerHTML.toLowerCase()) {
+					case '1': id = 2; btn1 = btn; break; // These ids are taken from the original code
+					case '10': id = 3; btn10 = btn; break;
+					case '50': id = 3.5; break; // This is the new id for the 50 button
+					case '100': id = 4; btn100 = btn; break;
+					case 'all': id = 5; btnAll = btn; break;
+					default: return;
+				}
+				btn.setAttribute('onclick', `Game.mods['${MOD.id}'].storeBulkButtonClick(${id})`);
+			});
+		}
 
 		let buyBulk50Shortcut = false;
 		Game.registerHook('logic', () => {
